@@ -131,6 +131,7 @@ document.addEventListener("DOMContentLoaded", function(e) {
     
     // Track carousel
     let mousedown = false;
+    let movement = false;
     let initialPosition = 0;
     let selectedItem;
     let currentDelta = 0;
@@ -167,12 +168,20 @@ document.addEventListener("DOMContentLoaded", function(e) {
         if(mousedown == true && typeof selectedItem !== "undefined") {
             let change = -(initialPosition - e.pageX);
             scrollCarousel(change, currentDelta, document.body);
+            document.querySelectorAll(`${config.carouselId} a`).forEach(function(item) {
+                item.style.pointerEvents = 'none';
+            });
+            movement = true;
         }
     });
     
     ['pointerup', 'mouseleave'].forEach(function(item) {
         document.body.addEventListener(item, function(e) {
             selectedItem = undefined;
+            movement = false;
+            document.querySelectorAll(`${config.carouselId} a`).forEach(function(item) {
+                item.style.pointerEvents = 'all';
+            });
         });
     });
 
