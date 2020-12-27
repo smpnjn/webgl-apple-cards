@@ -27,10 +27,16 @@ const createWave = async function(selector, colors) {
         // For each of the selector elements
         document.querySelectorAll(selector).forEach(function(item) {
             // Create a renderer
+            
+            const newCanvas = document.createElement('canvas');
+            newCanvas.id = `canvas-${i}`;
+            item.appendChild(newCanvas);
+            
             const renderer = new THREE.WebGLRenderer({
                 powerPreference: "high-performance",
                 antialias: true, 
-                alpha: true
+                alpha: true,
+                canvas: document.getElementById(`canvas-${i}`)
             });
 
             // Get el width and height
@@ -39,7 +45,6 @@ const createWave = async function(selector, colors) {
 
             // Set sizes and set scene/camera
             renderer.setSize( elWidth, elHeight );
-            document.body.appendChild( renderer.domElement )
             renderer.setPixelRatio( window.devicePixelRatio );
 
             const scene = new THREE.Scene();
@@ -113,7 +118,6 @@ const createWave = async function(selector, colors) {
             const animate = function () {
                 requestAnimationFrame( animate );
                 renderer.render( scene, camera );
-                item.appendChild(renderer.domElement);
                 mesh.material.uniforms.u_time.value = t;
                 t = t + 0.02;
             };
